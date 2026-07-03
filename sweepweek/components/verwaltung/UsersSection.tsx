@@ -1,0 +1,86 @@
+"use client";
+
+import { useState, useTransition } from "react";
+import { addUser, deleteUser, updateUserName } from "@/app/verwaltung/actions";
+
+export function UsersSection({
+  users,
+}: {
+  users: { id: number; name: string; color: string }[];
+}) {
+  const [newName, setNewName] = useState("");
+  const [isPending, startTransition] = useTransition();
+
+  function handleAdd() {
+    if (!newName.trim()) return;
+    startTransition(async () => {
+      await addUser(newName);
+      setNewName("");
+    });
+  }
+
+  function handleDelete(id: number, name: string) {
+    if (
+      !confirm(
+        `Nutzer "${name}" wirklich entfernen? Erledigungen bleiben bestehen, verlieren aber diese Zuordnung.`,
+      )
+    )
+      return;
+    startTransition(() => deleteUser(id));
+  }
+
+  return (
+    <section className="mb-10">
+      <h2 className="mb-2.5 text-[13px] font-bold uppercase tracking-wide text-text-secondary">
+        Nutzer
+      </h2>
+
+      {users.map((user) => (
+        <div
+          key={user.id}
+          className="mb-2 flex items-center gap-2.5 rounded-xl border border-border bg-surface px-3.5 py-3"
+        >
+          <div
+            className="h-2.5 w-2.5 min-w-2.5 rounded-full"
+            style={{ background: user.color }}
+          />
+          <input
+            defaultValue={user.name}
+            onBlur={(e) => {
+              if (e.target.value.trim() !== user.name) {
+                startTransition(() => updateUserName(user.id, e.target.value));
+              }
+            }}
+            className="min-w-0 flex-1 bg-transparent text-sm font-semibold outline-none"
+          />
+          <button
+            type="button"
+            disabled={isPending}
+            onClick={() => handleDelete(user.id, user.name)}
+            className="whitespace-nowrap text-xs font-semibold text-danger disabled:opacity-50"
+          >
+            Entfernen
+          </button>
+        </div>
+      ))}
+
+      <div className="mt-1 flex gap-2">
+        <input
+          value={newName}
+          onChange={(e) => setNewName(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleAdd()}
+          placeholder="Neuer Nutzer"
+          className="min-w-0 flex-1 rounded-[10px] border border-border bg-surface px-3 py-2.5 text-sm outline-none"
+        />
+        <button
+          type="button"
+          disabled={isPending}
+          onClick={handleAdd}
+          className="whitespace-nowrap rounded-[10px] bg-accent px-4 py-2.5 text-[13px] font-bold text-accent-text disabled:opacity-50"
+        >
+          Hinzufügen
+        </button>
+      </div>
+    </section>
+  );
+}

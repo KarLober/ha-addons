@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #f5f7f8;
+  --color-surface: #ffffff;
+  --color-text: #1c2024;
+  --color-text-secondary: #6b7480;
+  --color-text-tertiary: #9aa2a9;
+  --color-border: #e4e7e9;
+  --color-border-soft: #edf0f1;
+  --color-accent: #5b7480;
+  --color-accent-text: #ffffff;
+  --color-danger: #c94a41;
+  --color-danger-bg: rgba(201, 74, 65, 0.09);
+  --color-warning: #b9832a;
+  --color-warning-bg: rgba(185, 131, 42, 0.1);
+  --color-success: #3f8f52;
+  --color-success-bg: rgba(63, 143, 82, 0.1);
+  --color-chip: #eef1f2;
+  --color-nav-bg: #ffffff;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #15171a;
+    --color-surface: #1e2124;
+    --color-text: #eceeef;
+    --color-text-secondary: #9aa1a8;
+    --color-text-tertiary: #6b7278;
+    --color-border: #2b2f33;
+    --color-border-soft: #25282c;
+    --color-accent: #8fa9b6;
+    --color-accent-text: #0f1518;
+    --color-danger: #e5766f;
+    --color-danger-bg: rgba(229, 118, 111, 0.14);
+    --color-warning: #e2b25f;
+    --color-warning-bg: rgba(226, 178, 95, 0.14);
+    --color-success: #68b878;
+    --color-success-bg: rgba(104, 184, 120, 0.14);
+    --color-chip: #26292d;
+    --color-nav-bg: #1a1c1f;
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-bg: #15171a;
+  --color-surface: #1e2124;
+  --color-text: #eceeef;
+  --color-text-secondary: #9aa1a8;
+  --color-text-tertiary: #6b7278;
+  --color-border: #2b2f33;
+  --color-border-soft: #25282c;
+  --color-accent: #8fa9b6;
+  --color-accent-text: #0f1518;
+  --color-danger: #e5766f;
+  --color-danger-bg: rgba(229, 118, 111, 0.14);
+  --color-warning: #e2b25f;
+  --color-warning-bg: rgba(226, 178, 95, 0.14);
+  --color-success: #68b878;
+  --color-success-bg: rgba(104, 184, 120, 0.14);
+  --color-chip: #26292d;
+  --color-nav-bg: #1a1c1f;
+}
+
+:root[data-theme="light"] {
+  --color-bg: #f5f7f8;
+  --color-surface: #ffffff;
+  --color-text: #1c2024;
+  --color-text-secondary: #6b7480;
+  --color-text-tertiary: #9aa2a9;
+  --color-border: #e4e7e9;
+  --color-border-soft: #edf0f1;
+  --color-accent: #5b7480;
+  --color-accent-text: #ffffff;
+  --color-danger: #c94a41;
+  --color-danger-bg: rgba(201, 74, 65, 0.09);
+  --color-warning: #b9832a;
+  --color-warning-bg: rgba(185, 131, 42, 0.1);
+  --color-success: #3f8f52;
+  --color-success-bg: rgba(63, 143, 82, 0.1);
+  --color-chip: #eef1f2;
+  --color-nav-bg: #ffffff;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  color-scheme: light dark;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}

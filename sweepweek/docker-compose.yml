@@ -1,0 +1,14 @@
+services:
+  sweepweek:
+    build:
+      context: .
+    environment:
+      EXTERNAL_BASE_PATH: ${EXTERNAL_BASE_PATH:-}
+    ports:
+      - "3000:3000"
+    volumes:
+      - sweepweek-data:/data
+    restart: unless-stopped
+
+volumes:
+  sweepweek-data:
