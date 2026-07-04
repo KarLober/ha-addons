@@ -56,7 +56,7 @@ export function RoomsSection({
                 startTransition(() => updateRoomName(room.id, e.target.value));
               }
             }}
-            className="min-w-0 flex-1 bg-transparent text-sm font-semibold outline-none"
+            className="min-w-0 flex-1 rounded-lg border border-transparent bg-chip px-2.5 py-1.5 text-sm font-semibold outline-none transition-colors hover:border-border focus:border-accent focus:bg-surface"
           />
           <button
             type="button"

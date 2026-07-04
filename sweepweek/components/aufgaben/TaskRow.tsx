@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { completeTask } from "@/app/aufgaben/actions";
 import type { TaskWithStatus } from "@/lib/db/queries";
 
@@ -25,22 +25,23 @@ const bucketTextClass: Record<TaskWithStatus["status"]["bucket"], string> = {
 export function TaskRow({
   task,
   users,
+  currentUserId,
   showRoom,
   expanded,
   onToggleExpand,
 }: {
   task: TaskWithStatus;
   users: { id: number; name: string }[];
+  currentUserId: number | null;
   showRoom: boolean;
   expanded: boolean;
   onToggleExpand: () => void;
 }) {
-  const [date, setDate] = useState(todayIso());
   const [isPending, startTransition] = useTransition();
 
   function handleComplete(userIds: number[]) {
     startTransition(async () => {
-      await completeTask(task.id, userIds, date);
+      await completeTask(task.id, userIds, todayIso());
     });
   }
 
@@ -65,24 +66,28 @@ export function TaskRow({
             {task.dueText}
           </div>
         </div>
-        <button
-          type="button"
-          onClick={onToggleExpand}
-          className="whitespace-nowrap rounded-full border border-accent px-3.5 py-1.5 text-[13px] font-semibold text-accent"
-        >
-          Erledigt
-        </button>
+        <div className="flex items-stretch overflow-hidden rounded-full border border-accent">
+          <button
+            type="button"
+            disabled={currentUserId === null || isPending}
+            onClick={() => handleComplete([currentUserId!])}
+            className="whitespace-nowrap px-3.5 py-1.5 text-[13px] font-semibold text-accent disabled:opacity-40"
+          >
+            Erledigt
+          </button>
+          <button
+            type="button"
+            onClick={onToggleExpand}
+            aria-label="Andere Auswahl anzeigen"
+            className="border-l border-accent px-2.5 py-1.5 text-[13px] leading-[1.2] text-accent"
+          >
+            ⌄
+          </button>
+        </div>
       </div>
 
       {expanded && (
         <div className="flex flex-wrap items-center gap-2 px-3.5 pb-3.5">
-          <input
-            type="date"
-            value={date}
-            max={todayIso()}
-            onChange={(e) => setDate(e.target.value)}
-            className="rounded-lg border border-border bg-bg px-2.5 py-1.5 text-[13px] text-text"
-          />
           {users.map((user) => (
             <button
               key={user.id}

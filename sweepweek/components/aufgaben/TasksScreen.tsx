@@ -14,10 +14,12 @@ export function TasksScreen({
   tasks,
   users,
   rooms,
+  currentUserId,
 }: {
   tasks: TaskWithStatus[];
   users: { id: number; name: string }[];
   rooms: { id: number; name: string }[];
+  currentUserId: number | null;
 }) {
   const [grouping, setGrouping] = useState<Grouping>("urgency");
   const [expandedTaskId, setExpandedTaskId] = useState<number | null>(null);
@@ -83,6 +85,7 @@ export function TasksScreen({
                 key={task.id}
                 task={task}
                 users={users}
+                currentUserId={currentUserId}
                 showRoom={section.showRoom}
                 expanded={expandedTaskId === task.id}
                 onToggleExpand={() =>

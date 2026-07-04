@@ -81,7 +81,7 @@ export function TasksSection({
                   );
                 }
               }}
-              className="block w-full bg-transparent text-sm font-semibold outline-none"
+              className="block w-full rounded-lg border border-transparent bg-chip px-2.5 py-1.5 text-sm font-semibold outline-none transition-colors hover:border-border focus:border-accent focus:bg-surface"
             />
           </div>
           <div className="flex items-center gap-1.5">
