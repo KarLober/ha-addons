@@ -99,8 +99,16 @@ const proxyServer = http.createServer((clientReq, clientRes) => {
             .split(INGRESS_BASE_PATH)
             .join(prefix);
           body = Buffer.from(rewritten, "utf8");
-          headers["content-length"] = String(Buffer.byteLength(body));
         }
+
+        // We always forward the fully buffered body in one shot (never
+        // streamed), so a "transfer-encoding: chunked" carried over from
+        // upstream is both wrong and, combined with the content-length we
+        // set below, an invalid/ambiguous framing that strict HTTP clients
+        // (e.g. Supervisor's aiohttp ingress proxy) reject as a 502 - curl
+        // tolerates it, which is why this only showed up through real HA.
+        delete headers["transfer-encoding"];
+        headers["content-length"] = String(Buffer.byteLength(body));
 
         // Rewrite any header whose value embeds the placeholder, not just
         // Location: Next also sends font/script preload hints via a Link
