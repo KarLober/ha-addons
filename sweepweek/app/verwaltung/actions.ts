@@ -83,11 +83,6 @@ export async function updateTaskName(id: number, name: string) {
   revalidateAll();
 }
 
-export async function updateTaskRoom(id: number, roomId: number) {
-  db.update(tasks).set({ roomId }).where(eq(tasks.id, id)).run();
-  revalidateAll();
-}
-
 export async function updateTaskInterval(id: number, intervalDays: number) {
   const interval = Math.max(1, Math.floor(intervalDays) || 1);
   db.update(tasks).set({ intervalDays: interval }).where(eq(tasks.id, id)).run();
