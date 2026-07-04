@@ -17,17 +17,19 @@ export function TasksSection({
   rooms: { id: number; name: string }[];
 }) {
   const [newName, setNewName] = useState("");
-  const [newRoomId, setNewRoomId] = useState<number | "">(rooms[0]?.id ?? "");
   const [newInterval, setNewInterval] = useState(7);
   const [selectedRoomId, setSelectedRoomId] = useState<number | "">(
     rooms[0]?.id ?? "",
   );
   const [isPending, startTransition] = useTransition();
 
+  const activeRoomId =
+    rooms.some((r) => r.id === selectedRoomId) ? selectedRoomId : (rooms[0]?.id ?? "");
+
   function handleAdd() {
-    if (!newName.trim() || !newRoomId) return;
+    if (!newName.trim() || !activeRoomId) return;
     startTransition(async () => {
-      await addTask(newName, Number(newRoomId), newInterval);
+      await addTask(newName, Number(activeRoomId), newInterval);
       setNewName("");
       setNewInterval(7);
     });
@@ -43,8 +45,6 @@ export function TasksSection({
     startTransition(() => deleteTask(id));
   }
 
-  const activeRoomId =
-    rooms.some((r) => r.id === selectedRoomId) ? selectedRoomId : (rooms[0]?.id ?? "");
   const visibleTasks = tasks.filter((t) => t.roomId === activeRoomId);
 
   return (
@@ -128,17 +128,6 @@ export function TasksSection({
           className="rounded-[10px] border border-border bg-surface px-3 py-2.5 text-sm outline-none"
         />
         <div className="flex gap-2">
-          <select
-            value={newRoomId}
-            onChange={(e) => setNewRoomId(Number(e.target.value))}
-            className="min-w-0 flex-1 rounded-[10px] border border-border bg-surface px-3 py-2.5 text-sm outline-none"
-          >
-            {rooms.map((room) => (
-              <option key={room.id} value={room.id}>
-                {room.name}
-              </option>
-            ))}
-          </select>
           <input
             type="number"
             min={1}
