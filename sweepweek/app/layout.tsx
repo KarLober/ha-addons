@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { BottomNav } from "@/components/nav/BottomNav";
+import { PollRefresh } from "@/components/PollRefresh";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -52,6 +53,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body className="flex h-full min-h-full justify-center bg-bg font-sans text-text">
+        <PollRefresh />
         <div className="flex w-full max-w-[480px] flex-1 flex-col">
           <div className="flex flex-1 flex-col overflow-y-auto">{children}</div>
           <BottomNav />
