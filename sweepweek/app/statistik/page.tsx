@@ -1,5 +1,6 @@
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
 import { getTimeline, getUserStats } from "@/lib/db/queries";
+import { getBackButtonConfig } from "@/lib/back-button-config";
 
 export const dynamic = "force-dynamic";
 
@@ -8,12 +9,17 @@ export default async function StatistikPage() {
     getUserStats(),
     getTimeline(30),
   ]);
+  const { backButtonEnabled, backButtonPath } = getBackButtonConfig();
 
   const maxCount = Math.max(1, ...userStats.map((u) => u.count), togetherCount);
 
   return (
     <>
-      <ScreenHeader title="Statistik" />
+      <ScreenHeader
+        title="Statistik"
+        backButtonEnabled={backButtonEnabled}
+        backButtonPath={backButtonPath}
+      />
 
       <div className="px-5 pb-6">
         <div className="mb-2.5 text-[13px] font-bold uppercase tracking-wide text-text-secondary">

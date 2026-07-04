@@ -15,11 +15,15 @@ export function TasksScreen({
   users,
   rooms,
   currentUserId,
+  backButtonEnabled,
+  backButtonPath,
 }: {
   tasks: TaskWithStatus[];
   users: { id: number; name: string }[];
   rooms: { id: number; name: string }[];
   currentUserId: number | null;
+  backButtonEnabled: boolean;
+  backButtonPath?: string;
 }) {
   const [grouping, setGrouping] = useState<Grouping>("urgency");
   const [expandedTaskId, setExpandedTaskId] = useState<number | null>(null);
@@ -47,7 +51,11 @@ export function TasksScreen({
 
   return (
     <>
-      <ScreenHeader title="Aufgaben">
+      <ScreenHeader
+        title="Aufgaben"
+        backButtonEnabled={backButtonEnabled}
+        backButtonPath={backButtonPath}
+      >
         <div className="flex gap-1.5 rounded-xl bg-chip p-1">
           <button
             type="button"

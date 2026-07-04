@@ -1,4 +1,5 @@
 import http from "node:http";
+import fs from "node:fs";
 import { spawn } from "node:child_process";
 import { INGRESS_BASE_PATH } from "./constants.mjs";
 
@@ -7,6 +8,23 @@ const INTERNAL_PORT = 3001;
 // Optional fixed prefix for generic reverse-proxy setups that aren't HA
 // ingress (which supplies its prefix dynamically per request instead).
 const EXTERNAL_BASE_PATH = process.env.EXTERNAL_BASE_PATH ?? "";
+
+// HA Supervisor mounts the add-on's "Configuration" tab options here. Read
+// once at startup and forward as env vars to the Next.js child so the app
+// can render the optional back button without needing its own settings UI.
+// Falls back to whatever BACK_BUTTON_* env vars are already set (plain
+// Docker/dev use) when this file doesn't exist.
+const ADDON_OPTIONS_PATH = "/data/options.json";
+
+function readAddonOptions() {
+  try {
+    return JSON.parse(fs.readFileSync(ADDON_OPTIONS_PATH, "utf8"));
+  } catch {
+    return {};
+  }
+}
+
+const addonOptions = readAddonOptions();
 
 const REWRITABLE_CONTENT_TYPES = [
   "text/html",
@@ -33,13 +51,21 @@ function currentPrefix(req) {
 
 // ---- start the real Next.js standalone server as a child process, bound
 // to an internal-only port ----
+const childEnv = {
+  ...process.env,
+  PORT: String(INTERNAL_PORT),
+  HOSTNAME: "127.0.0.1",
+};
+if (typeof addonOptions.back_button === "boolean") {
+  childEnv.BACK_BUTTON_ENABLED = String(addonOptions.back_button);
+}
+if (typeof addonOptions.back_button_path === "string" && addonOptions.back_button_path) {
+  childEnv.BACK_BUTTON_PATH = addonOptions.back_button_path;
+}
+
 const nextServer = spawn(process.execPath, ["server.js"], {
   stdio: "inherit",
-  env: {
-    ...process.env,
-    PORT: String(INTERNAL_PORT),
-    HOSTNAME: "127.0.0.1",
-  },
+  env: childEnv,
 });
 
 nextServer.on("exit", (code) => {

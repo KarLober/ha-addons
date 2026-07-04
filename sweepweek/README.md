@@ -13,6 +13,23 @@ Die Datenbank liegt im von Supervisor verwalteten Add-on-Datenverzeichnis (`/dat
 im Container) und wird von HA-Backups mit erfasst. Bei Schema- oder Code-Aenderungen
 `version` in `config.yaml` erhoehen, damit Supervisor ein Update anbietet.
 
+### Zurueck-Button
+
+Ueber den "Configuration"-Tab des Add-ons laesst sich oben im Header ein Zurueck-Button
+einblenden (z.B. wenn die App per Dashboard-Button geoeffnet wird und man dahin
+zurueckspringen moechte):
+
+- `back_button`: Button ein-/ausblenden (Standard: aus).
+- `back_button_path`: optionales Navigationsziel (z.B. `/lovelace-dashboard/0`). Leer
+  gelassen geht der Button einfach "zurueck" (Browser-Verlauf des uebergeordneten
+  HA-Fensters, faellt bei Zugriffsproblemen auf den eigenen Verlauf zurueck).
+
+Ist ein Ziel gesetzt, wird zusaetzlich versucht, das Ziel per `browser_mod`-Service
+anzuspringen (falls diese Community-Integration installiert ist) - das ist
+zuverlaessiger als eine direkte Navigation des uebergeordneten Fensters, falls HA das
+per Sandbox einschraenkt. Aenderungen an diesen Optionen erfordern einen Neustart des
+Add-ons.
+
 ## Entwicklung
 
 ```bash
