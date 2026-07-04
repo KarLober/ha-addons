@@ -35,13 +35,7 @@ export function TasksSection({
     });
   }
 
-  function handleDelete(id: number, name: string) {
-    if (
-      !confirm(
-        `Aufgabe "${name}" wirklich entfernen? Die Erledigungs-Historie geht dabei verloren.`,
-      )
-    )
-      return;
+  function handleDelete(id: number) {
     startTransition(() => deleteTask(id));
   }
 
@@ -106,7 +100,7 @@ export function TasksSection({
           <button
             type="button"
             disabled={isPending}
-            onClick={() => handleDelete(task.id, task.name)}
+            onClick={() => handleDelete(task.id)}
             className="whitespace-nowrap text-xs font-semibold text-danger disabled:opacity-50"
           >
             Entfernen
