@@ -1,4 +1,5 @@
 import { ScreenHeader } from "@/components/layout/ScreenHeader";
+import { Timeline } from "@/components/statistik/Timeline";
 import { getTimeline, getUserStats } from "@/lib/db/queries";
 import { getBackButtonConfig } from "@/lib/back-button-config";
 
@@ -54,36 +55,7 @@ export default async function StatistikPage() {
         <div className="mb-2.5 mt-7 text-[13px] font-bold uppercase tracking-wide text-text-secondary">
           Verlauf
         </div>
-        {timeline.map((entry) => (
-          <div
-            key={entry.id}
-            className="flex items-center gap-3.5 border-b border-border-soft py-3 last:border-b-0"
-          >
-            <div className="w-[52px] min-w-[52px] text-xs text-text-tertiary">
-              {entry.date.toLocaleDateString("de-DE", {
-                day: "2-digit",
-                month: "short",
-              })}
-            </div>
-            <div className="min-w-0 flex-1">
-              <div className="truncate text-[15px] font-semibold">
-                {entry.taskName}
-              </div>
-              <div className="truncate text-xs text-text-secondary">
-                {entry.roomName}
-              </div>
-            </div>
-            <div className="whitespace-nowrap rounded-full bg-chip px-2.5 py-1 text-xs font-semibold text-text-secondary">
-              {entry.personLabel}
-            </div>
-          </div>
-        ))}
-
-        {timeline.length === 0 && (
-          <div className="py-10 text-center text-sm text-text-secondary">
-            Noch keine Erledigungen.
-          </div>
-        )}
+        <Timeline entries={timeline} />
       </div>
     </>
   );
